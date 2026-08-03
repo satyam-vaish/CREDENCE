@@ -1,0 +1,9 @@
+.venv
+frontend
+data
+models
+mlruns
+.git
+.pytest_cache
+__pycache__
+*.pyc
