@@ -1,1 +1,0 @@
-"""CREDENCE FastAPI application package."""
