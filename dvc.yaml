@@ -1,0 +1,18 @@
+stages:
+  ingest:
+    cmd: python scripts/download_data.py
+    deps: [scripts/download_data.py, configs/config.yaml]
+    outs: [data/raw/loans.csv]
+  validate:
+    cmd: python -c "import pandas as pd,sys; sys.path.insert(0,'src'); from credence.validation import validate; from credence.config import ROOT,load_config; df=pd.read_csv(ROOT/load_config()['data']['raw_path']); validate(df); print('validation OK', len(df))"
+    deps: [data/raw/loans.csv, src/credence/validation.py]
+  features:
+    cmd: python -c "import pandas as pd,sys; sys.path.insert(0,'src'); from credence.features import FeatureBuilder; from credence.config import ROOT,load_config; from credence.data import time_split; cfg=load_config(); df=pd.read_csv(ROOT/cfg['data']['raw_path']); tr,va,lv=time_split(df,cfg['split']['train_last_month'],cfg['split']['val_last_month']); fb=FeatureBuilder().fit(tr); print('features OK', fb.transform(va).shape)"
+    deps: [src/credence/features.py]
+  train:
+    cmd: python -m credence.train
+    deps: [data/raw/loans.csv, src/credence/train.py, configs/config.yaml]
+    outs: [models]
+  evaluate:
+    cmd: python -c "import json; from credence.config import ROOT; m=json.loads((ROOT/'models/meta.json').read_text()); print('val AUC %.4f | live AUC %.4f | thr %.3f'%(m['metrics']['val']['roc_auc'],m['metrics']['live']['roc_auc'],m['threshold']))"
+    deps: [models/meta.json]
