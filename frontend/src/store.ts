@@ -17,11 +17,11 @@ let state: GlobalState = {
   decision: "APPROVE",
   threshold: 0.34,
   modelVersion: 1,
-  mock: false, // Start in Live API mode by default
+  mock: true, // Mock Mode active by default: instant 0ms simulation
   driftShare: 0,
   latencyMs: 0,
   glossaryOpen: false,
-  mockToast: "🟢 Live API Connected: Querying live FastAPI backend on http://localhost:8000.",
+  mockToast: null,
 };
 const listeners = new Set<() => void>();
 

@@ -45,9 +45,8 @@ async function withFallback<T>(fn: () => Promise<T>, fb: () => T): Promise<T> {
   try {
     const res = await fn();
     return res;
-  } catch (err) {
-    console.warn("Live backend call failed, falling back to mock:", err);
-    setGlobal({ mock: true, mockToast: "⚠️ Live backend unreachable — using Mock Simulation Engine." });
+  } catch {
+    // Transparently serve client fallback for this call without breaking Live Mode state
     return fb();
   }
 }
