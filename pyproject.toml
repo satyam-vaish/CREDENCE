@@ -26,3 +26,7 @@ ignore = ["E501", "B008"]
 [tool.pytest.ini_options]
 addopts = "--cov=credence --cov=backend --cov-report=term-missing --cov-fail-under=80"
 testpaths = ["tests"]
+
+[tool.vercel]
+entrypoint = "backend.app.main:app"
+
