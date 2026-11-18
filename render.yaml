@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: credence-api
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt && pip install -e . && python scripts/download_data.py && python -m credence.train 5
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: MODEL_DIR
+        value: models/registry/credit-default-model

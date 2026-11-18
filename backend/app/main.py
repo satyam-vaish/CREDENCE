@@ -58,6 +58,14 @@ def startup() -> None:
 
 
 @app.middleware("http")
+async def handle_api_prefix(request: Request, call_next):
+    # Support both /endpoint and /api/endpoint for cloud deployments (Vercel, Render, AWS)
+    if request.scope.get("path", "").startswith("/api/"):
+        request.scope["path"] = request.scope["path"][4:]
+    return await call_next(request)
+
+
+@app.middleware("http")
 async def logging_metrics(request: Request, call_next):
     t0 = time.perf_counter()
     response = await call_next(request)
