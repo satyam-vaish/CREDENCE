@@ -10,6 +10,22 @@ html {
   scroll-behavior: auto; /* lenis owns scrolling */
 }
 
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   background: #0a0c10;
   color: #f2eee3;
@@ -61,13 +77,10 @@ body {
   transform: translate3d(0, 0, 0);
 }
 
-/* Off-screen DOM rendering optimization: skips off-screen paint & layout */
+/* Hardware-accelerated GPU layer rendering without dynamic height shifts */
 section {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
-}
-#top {
-  content-visibility: visible;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .mono-label {

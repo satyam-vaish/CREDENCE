@@ -22,13 +22,16 @@ export default function App() {
   useEffect(() => {
     if (REDUCED) return;
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.09, // Instant zero-lag physics interpolation for buttery deceleration
+      wheelMultiplier: 1.2, // Enhanced scroll sensitivity for responsive mouse wheels
+      touchMultiplier: 1.5, // Natural sensitivity for trackpads and mobile touch
+      syncTouch: true,
+      syncTouchLerp: 0.075,
+      touchInertiaMultiplier: 1.2,
+      smoothWheel: true,
+      autoResize: true,
       orientation: "vertical",
       gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
     });
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
     let raf = 0;
